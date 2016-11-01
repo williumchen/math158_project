@@ -22,15 +22,14 @@ colnames(single.data.frame) <- colnames(headers)
 # Frequency of different location by campuses (tapply) summarize, function
 lower_campus <- tolower(single.data.frame$Campus)
 lower_campus <- gsub("ptz|pitzer.edu", "pit", lower_campus)
-lower_campus <- gsub("cmc.*|claremont.*", "cmc", lower_campus)
+lower_campus <- gsub("cmc.*|claremont.*|.*cmc", "cmc", lower_campus)
 lower_campus <- gsub("scr.*", "scr", lower_campus)
 lower_campus <- gsub("cgu.*", "cgu", lower_campus)
 lower_campus <- gsub("hmc.*", "hmc", lower_campus)
 lower_campus <- gsub("pom.*", "pom", lower_campus)
 lower_campus <- gsub("kgi.*", "kgi", lower_campus)
 campus_2015 <- table(lower_campus)
+single.data.frame$Campus <- lower_campus
 
 # Make date columns to be actual dates
 # strptime: R built in date formatting
-
-(campus_2015)
