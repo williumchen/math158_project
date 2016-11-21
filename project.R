@@ -64,3 +64,6 @@ lmod <- lm(as.numeric(Duration) ~ Campus*Device.Location, data=wifi_2015_data)
 summary(lmod)
 library(ggplot2)
 ggplot(wifi_2015_data,aes(x=Campus)) + geom_bar()
+
+
+# IDEA: People and places and time; location data and duration (aov), campus and location data, campus and duration (interaction??)
