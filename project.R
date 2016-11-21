@@ -20,16 +20,17 @@ colnames(wifi_2015_data) <- colnames(headers)
 
 # Frequency of different campuses (table)
 # Frequency of different location by campuses (tapply) summarize, function
-lower_campus <- tolower(single.data.frame$Campus)
+lower_campus <- tolower(wifi_2015_data$Campus)
 lower_campus <- gsub("ptz|pitzer.edu", "pit", lower_campus)
 lower_campus <- gsub("cmc.*|claremont.*|.*cmc", "cmc", lower_campus)
+lower_campus <- gsub("cuc.cmc", "cmc", lower_campus)
 lower_campus <- gsub("scr.*", "scr", lower_campus)
 lower_campus <- gsub("cgu.*", "cgu", lower_campus)
 lower_campus <- gsub("hmc.*", "hmc", lower_campus)
 lower_campus <- gsub("pom.*", "pom", lower_campus)
 lower_campus <- gsub("kgi.*", "kgi", lower_campus)
 campus_2015 <- table(lower_campus)
-single.data.frame$Campus <- lower_campus
+wifi_2015_data$Campus <- lower_campus
 
 # Make date columns to be actual dates
 # strptime: R built in date formatting
@@ -37,10 +38,21 @@ single.data.frame$Campus <- lower_campus
 # Format data
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Device.Location == "-"), ]
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "-"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "123"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Duration == "0 mins"), ]
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "yale.edu"), ]
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "my.csun.edu"), ]
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "tulane.edu"), ]
-wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "123"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "smith.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "swarthmore.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "brynmawr.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "cornell.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "csusb.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "gwmail.gwu.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "haverford.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "lsu.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "jsd"), ]
+
 
 plot(Duration ~ Campus, data=wifi_2015_data)
 
@@ -48,8 +60,7 @@ plot(Duration ~ Device.Location, data=wifi_2015_data)
 
 
 # Make model Duration ~ Campus + Location
-lmod <- lm(Duration ~ Campus*Device.Location, data=wifi_2015_data)
+lmod <- lm(as.numeric(Duration) ~ Campus*Device.Location, data=wifi_2015_data)
 summary(lmod)
-
-
-
+library(ggplot2)
+ggplot(wifi_2015_data,aes(x=Campus)) + geom_bar()
