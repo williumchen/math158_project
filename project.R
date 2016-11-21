@@ -42,13 +42,14 @@ wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "my.csun.edu"),
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "tulane.edu"), ]
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "123"), ]
 
-
 plot(Duration ~ Campus, data=wifi_2015_data)
 
 plot(Duration ~ Device.Location, data=wifi_2015_data)
 
-# Make small data frame
-wifi_2015_small <- wifi_2015_data[3,8,11]
 
-# Make model 
+# Make model Duration ~ Campus + Location
+lmod <- lm(Duration ~ Campus*Device.Location, data=wifi_2015_data)
+summary(lmod)
+
+
 
