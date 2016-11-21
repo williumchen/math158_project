@@ -15,8 +15,8 @@ wifi_2015.list <- lapply(wifi_2015, read.csv, header=FALSE)
 wifi_2016.list <- lapply(wifi_2016, read.csv, header=FALSE)
 
 # Bind all csv information for 2015 year into one data set
-single.data.frame <- do.call('rbind', wifi_2015.list)
-colnames(single.data.frame) <- colnames(headers)
+wifi_2015_data <- do.call('rbind', wifi_2015.list)
+colnames(wifi_2015_data) <- colnames(headers)
 
 # Frequency of different campuses (table)
 # Frequency of different location by campuses (tapply) summarize, function
@@ -33,3 +33,22 @@ single.data.frame$Campus <- lower_campus
 
 # Make date columns to be actual dates
 # strptime: R built in date formatting
+
+# Format data
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Device.Location == "-"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "-"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "yale.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "my.csun.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "tulane.edu"), ]
+wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "123"), ]
+
+
+plot(Duration ~ Campus, data=wifi_2015_data)
+
+plot(Duration ~ Device.Location, data=wifi_2015_data)
+
+# Make small data frame
+wifi_2015_small <- wifi_2015_data[3,8,11]
+
+# Make model 
+
