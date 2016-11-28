@@ -62,8 +62,30 @@ plot(Duration ~ Device.Location, data=wifi_2015_data)
 # Make model Duration ~ Campus + Location
 lmod <- lm(as.numeric(Duration) ~ Campus*Device.Location, data=wifi_2015_data)
 summary(lmod)
+
+# Plot histogram of schools
 library(ggplot2)
 ggplot(wifi_2015_data,aes(x=Campus)) + geom_bar()
 
+# Histogram of location
+ggplot(wifi_2015_data,aes(x=Device.Location)) + geom_bar()
 
-# IDEA: People and places and time; location data and duration (aov), campus and location data, campus and duration (interaction??)
+# Make duration a numeric variable
+wifi_2015_data$Duration <- as.numeric(wifi_2015_data$Duration)
+
+# Plot average duration against school
+ggplot(wifi_2015_data, aes(x=wifi_2015_data$Campus, y=wifi_2015_data$Duration)) + stat_summary(fun.y="mean", geom="bar")
+
+# Plot median duration against school
+ggplot(wifi_2015_data, aes(x=wifi_2015_data$Campus, y=wifi_2015_data$Duration)) + stat_summary(fun.y="median", geom="bar")
+
+# Plot average duration against location
+ggplot(wifi_2015_data, aes(x=wifi_2015_data$Device.Location, y=wifi_2015_data$Duration)) + stat_summary(fun.y="mean", geom="bar")
+
+# Plot median duration against location
+ggplot(wifi_2015_data, aes(x=wifi_2015_data$Device.Location, y=wifi_2015_data$Duration)) + stat_summary(fun.y="median", geom="bar")
+
+# IDEA: People and places and time; location data and duration (aov), 
+# campus and location data, campus and duration (interaction??)
+
+
