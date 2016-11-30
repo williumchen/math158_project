@@ -60,6 +60,21 @@ plot(Duration ~ Campus, data=wifi_2015_data)
 
 plot(Duration ~ Device.Location, data=wifi_2015_data)
 
+# Make duration a numeric variable
+temp2 <- gregexpr("[0-9]+", wifi_2015_data$Duration)
+matches <- regmatches(wifi_2015_data$Duration, temp2)
+newDur <- c()
+for (row in matches) {
+  len <- length(row)
+  if (len == 1) {
+    newDur <- c(newDur, as.numeric(row))
+  } else if (len == 2) {
+    newDur <- c(newDur, as.numeric(row[1])*60 + as.numeric(row[2]))
+  } else {
+    newDur <- c(newDur, (as.numeric(row[1])*60*24) + (as.numeric(row[2])*60) + as.numeric(row[3]))
+  }
+}
+wifi_2015_data$Duration <- newDur
 
 # Make model Duration ~ Campus + Location
 lmod <- lm(as.numeric(Duration) ~ Campus*Device.Location, data=wifi_2015_data)
@@ -71,9 +86,6 @@ ggplot(wifi_2015_data,aes(x=Campus)) + geom_bar()
 
 # Histogram of location
 ggplot(wifi_2015_data,aes(x=Device.Location)) + geom_bar()
-
-# Make duration a numeric variable
-wifi_2015_data$Duration <- as.numeric(wifi_2015_data$Duration)
 
 # Plot average duration against school
 ggplot(wifi_2015_data, aes(x=wifi_2015_data$Campus, y=wifi_2015_data$Duration)) + stat_summary(fun.y="mean", geom="bar")
