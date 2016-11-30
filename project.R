@@ -56,7 +56,6 @@ wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "haverford.edu"
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "lsu.edu"), ]
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Campus == "jsd"), ]
 
-
 plot(Duration ~ Campus, data=wifi_2015_data)
 
 plot(Duration ~ Device.Location, data=wifi_2015_data)
@@ -98,5 +97,3 @@ library(plotly)
 plot_ly(type="scatter3d",x=wifi_2015_data$Campus,y=wifi_2015_data$Device.Location,z=wifi_2015_data$ConnectStart,mode="markers")
 
 ggplot(wifi_2015_data, aes(x=wifi_2015_data$ConnectStart, y=wifi_2015_data$Duration))
-
-
