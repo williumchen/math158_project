@@ -98,6 +98,6 @@ plot_ly(type="scatter3d",x=wifi_2015_data$Campus,y=wifi_2015_data$Duration, z=wi
 
 ggplot(wifi_2015_data, aes(x=wifi_2015_data$ConnectStart, y=wifi_2015_data$Duration))
 
-ggplot(data = wifi_2015_melt, aes(x=Device.Location, y=Duration, fill=Campus))  + 
-  geom_bar(stat="identity")
+agg <- aggregate(wifi_2015_data$Duration ~ wifi_2015_data$Campus + wifi_2015_data$Device.Location, FUN = sum)
+ggplot(data=agg, aes(x=agg$`wifi_2015_data$Device.Location`, y=agg$`wifi_2015_data$Duration`, fill=agg$`wifi_2015_data$Campus`))  + geom_bar(stat="identity") + scale_fill_discrete(name = "Campus")
 
