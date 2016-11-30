@@ -94,9 +94,9 @@ summary(mod)
 # campus and location data, campus and duration (interaction??)
 
 library(plotly)
-
-plot_ly(type="scatter3d",x=wifi_2015_data$Campus,y=wifi_2015_data$Device.Location,z=wifi_2015_data$ConnectStart,mode="markers")
+library(ggplot2)
+plot_ly(type="scatter3d",x=wifi_2015_data$Campus,y=wifi_2015_data$Duration, z=wifi_2015_data$Device.Location,,mode="markers")
 
 ggplot(wifi_2015_data, aes(x=wifi_2015_data$ConnectStart, y=wifi_2015_data$Duration))
-
-
+ggplot(data = wifi_2015_melt, aes(x=Device.Location, y=Duration, fill=Campus))  + 
+  geom_bar(stat="identity")
