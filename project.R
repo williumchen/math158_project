@@ -18,6 +18,9 @@ wifi_2016.list <- lapply(wifi_2016, read.csv, header=FALSE)
 wifi_2015_data <- do.call('rbind', wifi_2015.list)
 colnames(wifi_2015_data) <- colnames(headers)
 
+wifi_2016_data <- do.call('rbind', wifi_2016.list)
+colnames(wifi_2016_data) <- colnames(headers)
+
 # Frequency of different campuses (table)
 # Frequency of different location by campuses (tapply) summarize, function
 lower_campus <- tolower(wifi_2015_data$Campus)
@@ -85,7 +88,15 @@ ggplot(wifi_2015_data, aes(x=wifi_2015_data$Device.Location, y=wifi_2015_data$Du
 # Plot median duration against location
 ggplot(wifi_2015_data, aes(x=wifi_2015_data$Device.Location, y=wifi_2015_data$Duration)) + stat_summary(fun.y="median", geom="bar")
 
+mod <- lm(Duration ~ Device.Location + Campus, data = wifi_2015_data)
+summary(mod)
 # IDEA: People and places and time; location data and duration (aov), 
 # campus and location data, campus and duration (interaction??)
+
+library(plotly)
+
+plot_ly(type="scatter3d",x=wifi_2015_data$Campus,y=wifi_2015_data$Device.Location,z=wifi_2015_data$ConnectStart,mode="markers")
+
+ggplot(wifi_2015_data, aes(x=wifi_2015_data$ConnectStart, y=wifi_2015_data$Duration))
 
 
