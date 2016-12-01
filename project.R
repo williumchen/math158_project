@@ -78,6 +78,40 @@ wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Duration == 3), ]
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Duration == 4), ]
 wifi_2015_data <- wifi_2015_data[-which(wifi_2015_data$Duration > 900), ]
 
+# Make heatmap dataframe
+library(plyr)
+temp2 <- gregexpr("[0-9]+", wifi_2015_data$ConnectStart)
+matches <- regmatches(wifi_2015_data$ConnectStart, temp2)
+time_data <- c()
+for (row in matches) {
+  if (length(row[2]) == 1) {
+    row[2] = paste("0", row[2], sep="")
+  }
+  time_data <- c(time_data, paste(row[1], row[2], sep="/"))
+}
+time_data <- sort(time_data)
+wifi_2015_data$ConnectStart <- time_data
+
+count_agg <- count(wifi_2015_data, c('ConnectStart','Campus'))
+heat_count <- reshape(count_agg, idvar = "Campus", timevar = "ConnectStart", direction = "wide")
+heat_count[is.na(heat_count)] <- 0
+rownames(heat_count) <- unique(count_agg$Campus)
+colnames(heat_count) <- unique(count_agg$ConnectStart)
+heat_count <- subset(heat_count, select = -1)
+heat_count <- subset(heat_count, select = -1)
+heat_count <- subset(heat_count, select = -1)
+heat_count <- subset(heat_count, select = -1)
+heat_count <- subset(heat_count, select = -1)
+heat_count <- subset(heat_count, select = -1)
+
+heat_matrix <- t(data.matrix(heat_count))
+heatmap <- heatmap(heat_matrix, Rowv=NA, Colv=NA, col = cm.colors(256), scale="column", margins=c(5,10))
+
+# Make model Duration ~ Campus + Location
+lmod <- lm(as.numeric(Duration) ~ Campus*Device.Location, data=wifi_2015_data)
+summary(lmod)
+
+
 # Plot histogram of schools
 library(ggplot2)
 ggplot(wifi_2015_data,aes(x=Campus)) + geom_bar()
