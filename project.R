@@ -93,10 +93,11 @@ time_data <- sort(time_data)
 wifi_2015_data$ConnectStart <- time_data
 
 count_agg <- count(wifi_2015_data, c('ConnectStart','Campus'))
-heat_count <- reshape(count_agg, idvar = "Campus", timevar = "ConnectStart", direction = "wide")
+count_agg2 <- aggregate(wifi_2015_data$Duration ~ wifi_2015_data$Campus + wifi_2015_data$ConnectStart, FUN = sum)
+heat_count <- reshape(count_agg2, idvar = "wifi_2015_data$Campus", timevar = "wifi_2015_data$ConnectStart", direction = "wide")
 heat_count[is.na(heat_count)] <- 0
-rownames(heat_count) <- unique(count_agg$Campus)
-colnames(heat_count) <- unique(count_agg$ConnectStart)
+rownames(heat_count) <- unique(count_agg2$`wifi_2015_data$Campus`)
+colnames(heat_count) <- unique(count_agg2$`wifi_2015_data$ConnectStart`)
 heat_count <- subset(heat_count, select = -1)
 heat_count <- subset(heat_count, select = -1)
 heat_count <- subset(heat_count, select = -1)
@@ -151,7 +152,7 @@ ggplot(data=agg, aes(x=agg$`wifi_2015_data$Device.Location`, y=agg$`wifi_2015_da
 # 2016 #
 ########
 
-wifi_2016 <- list.files("rawWifi2016", pattern="[0-9][0-9][0-9][0-9][0-9][0-2][0-9][0-9].csv", full=TRUE)
+wifi_2016 <- list.files("rawWifi2016", pattern="[0-9][0-9][0-9][0-9][0-9][0-3][0-9][0-9].csv", full=TRUE)
 
 wifi_2016.list <- lapply(wifi_2016, read.csv, header=FALSE)
 
@@ -190,6 +191,14 @@ wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "swin.edu.au"),
 wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "student.unisg.ch"), ]
 wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "st-andrews.ac.uk"), ]
 wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "smith.edu"), ]
+wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "qmul.ac.uk"), ]
+wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "northeastern.edu"), ]
+wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "lsu.edu"), ]
+wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "gwmail.gwu.edu"), ]
+wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "eduroam.ucc.ie"), ]
+wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "ed.ac.uk"), ]
+wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "csusb.edu"), ]
+wifi_2016_data <- wifi_2016_data[-which(wifi_2016_data$Campus == "cam.ac.uk"), ]
 
 # Make duration a numeric variable
 temp1 <- gregexpr("[0-9]+", wifi_2016_data$Duration)
@@ -235,6 +244,6 @@ library(ggplot2)
 
 ggplot(wifi_2016_data, aes(x=wifi_2016_data$ConnectStart, y=wifi_2016_data$Duration))
 
-agg <- aggregate(wifi_2016_data$Duration ~ wifi_2016_data$Campus + wifi_2016_data$Device.Location, FUN = sum)
-ggplot(data=agg, aes(x=agg$`wifi_2016_data$Device.Location`, y=agg$`wifi_2016_data$Duration`, fill=agg$`wifi_2016_data$Campus`))  + geom_bar(stat="identity") + scale_fill_discrete(name = "Campus")
+agg2 <- aggregate(wifi_2016_data$Duration ~ wifi_2016_data$Campus + wifi_2016_data$Device.Location, FUN = sum)
+ggplot(data=agg2, aes(x=agg2$`wifi_2016_data$Device.Location`, y=agg2$`wifi_2016_data$Duration`, fill=agg2$`wifi_2016_data$Campus`))  + geom_bar(stat="identity") + scale_fill_discrete(name = "Campus")
 
