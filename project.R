@@ -116,9 +116,10 @@ colnames(heat_count) <- unique(count_agg2$`wifi_2015_data$ConnectStart`)
 heat_count <- subset(heat_count, select = -1)
 heat_count <- subset(heat_count, select = -1)
 
-
+require(gplots)
 heat_matrix <- t(data.matrix(heat_count))
 heatmap <- heatmap(heat_matrix, Rowv=NA, Colv=NA, col = heat.colors(256), scale="column", margins=c(5,10))
+# heatmap <- heatmap.2(heat_matrix, cellnote=heat_matrix, Rowv=NA, Colv=NA, col = heat.colors(256), scale="column", margins=c(5,10))
 
 # Make model Duration ~ Campus + Location
 lmod <- lm(as.numeric(Duration) ~ Campus*Device.Location, data=wifi_2015_data)
