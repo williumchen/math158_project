@@ -84,8 +84,10 @@ temp2 <- gregexpr("[0-9]+", wifi_2015_data$ConnectStart)
 matches <- regmatches(wifi_2015_data$ConnectStart, temp2)
 time_data <- c()
 for (row in matches) {
-  if (length(row[2]) == 1) {
-    row[2] = paste("0", row[2], sep="")
+  if (!is.na(row[[1]][2])) {
+    if (nchar(row[[1]][2]) == 1) {
+      row[2] = paste("0", row[2], sep="")
+    }
   }
   time_data <- c(time_data, paste(row[1], row[2], sep="/"))
 }
