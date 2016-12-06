@@ -97,6 +97,17 @@ time_data <- sort(time_data)
 wifi_2015_data$ConnectStart <- time_data
 
 count_agg <- count(wifi_2015_data, c('ConnectStart','Campus'))
+heat_count <- reshape(count_agg, idvar = "Campus", timevar = "ConnectStart", direction = "wide")
+heat_count[is.na(heat_count)] <- 0
+rownames(heat_count) <- unique(count_agg$Campus)
+colnames(heat_count) <- unique(count_agg$ConnectStart)
+heat_count <- subset(heat_count, select = -1)
+heat_count <- subset(heat_count, select = -1)
+
+
+heat_matrix <- t(data.matrix(heat_count))
+heatmap <- heatmap(heat_matrix, Rowv=NA, Colv=NA, col = heat.colors(256), scale="column", margins=c(5,10))
+
 count_agg2 <- aggregate(wifi_2015_data$Duration ~ wifi_2015_data$Campus + wifi_2015_data$ConnectStart, FUN = sum)
 heat_count <- reshape(count_agg2, idvar = "wifi_2015_data$Campus", timevar = "wifi_2015_data$ConnectStart", direction = "wide")
 heat_count[is.na(heat_count)] <- 0
@@ -104,13 +115,10 @@ rownames(heat_count) <- unique(count_agg2$`wifi_2015_data$Campus`)
 colnames(heat_count) <- unique(count_agg2$`wifi_2015_data$ConnectStart`)
 heat_count <- subset(heat_count, select = -1)
 heat_count <- subset(heat_count, select = -1)
-heat_count <- subset(heat_count, select = -1)
-heat_count <- subset(heat_count, select = -1)
-heat_count <- subset(heat_count, select = -1)
-heat_count <- subset(heat_count, select = -1)
+
 
 heat_matrix <- t(data.matrix(heat_count))
-heatmap <- heatmap(heat_matrix, Rowv=NA, Colv=NA, col = cm.colors(256), scale="column", margins=c(5,10))
+heatmap <- heatmap(heat_matrix, Rowv=NA, Colv=NA, col = heat.colors(256), scale="column", margins=c(5,10))
 
 # Make model Duration ~ Campus + Location
 lmod <- lm(as.numeric(Duration) ~ Campus*Device.Location, data=wifi_2015_data)
@@ -150,8 +158,8 @@ library(ggplot2)
 ggplot(wifi_2015_data, aes(x=wifi_2015_data$ConnectStart, y=wifi_2015_data$Duration))
 
 agg <- aggregate(wifi_2015_data$Duration ~ wifi_2015_data$Campus + wifi_2015_data$Device.Location, FUN = sum)
-ggplot(data=agg, aes(x=agg$`wifi_2015_data$Campus`, y=agg$`wifi_2015_data$Duration`, fill=agg$`wifi_2015_data$Device.Location`))  + geom_bar(stat="identity") + scale_fill_discrete(name = "Campus")
-ggplot(data=agg, aes(x=agg$`wifi_2015_data$Device.Location`, y=agg$`wifi_2015_data$Duration`, fill=agg$`wifi_2015_data$Campus`))  + geom_bar(stat="identity") + scale_fill_discrete(name = "Campus")
+ggplot(data=agg, aes(x=agg$`wifi_2015_data$Campus`, y=agg$`wifi_2015_data$Duration`, fill=agg$`wifi_2015_data$Device.Location`))  + geom_bar(stat="identity") + scale_fill_discrete(name = "Campus") + labs(x="Campus", y="Duration (minutes)")
+ggplot(data=agg, aes(x=agg$`wifi_2015_data$Device.Location`, y=agg$`wifi_2015_data$Duration`, fill=agg$`wifi_2015_data$Campus`))  + geom_bar(stat="identity") + scale_fill_discrete(name = "Campus") + labs(x="Location", y="Duration (minutes)")
 ######## 
 # 2016 #
 ########
