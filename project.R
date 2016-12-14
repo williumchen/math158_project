@@ -260,3 +260,19 @@ ggplot(wifi_2016_data, aes(x=wifi_2016_data$ConnectStart, y=wifi_2016_data$Durat
 agg2 <- aggregate(wifi_2016_data$Duration ~ wifi_2016_data$Campus + wifi_2016_data$Device.Location, FUN = sum)
 ggplot(data=agg2, aes(x=agg2$`wifi_2016_data$Device.Location`, y=agg2$`wifi_2016_data$Duration`, fill=agg2$`wifi_2016_data$Campus`))  + geom_bar(stat="identity") + scale_fill_discrete(name = "Campus")
 
+# Box Cox, ANOVA, Tukey
+require(MASS)
+dur_lm <- lm(wifi_2015_data$Duration ~ wifi_2015_data$Device.Location + wifi_2015_data$Campus)
+summary(dur_lm)
+# Interaction terms
+# dur_inter_lm <- lm(wifi_2015_data$Duration ~ wifi_2015_data$Device.Location*wifi_2015_data$Campus)
+# summary(dur_inter_lm)
+anova(dur_lm)
+(tci <- TukeyHSD(aov(wifi_2015_data$Duration ~ wifi_2015_data$Device.Location + wifi_2015_data$Campus)))
+par(las=1, mar=c(5,20,5,5))
+plot(tci)
+
+# Multi-level Tukey
+# (tci <- TukeyHSD(aov(wifi_2015_data$Duration ~ wifi_2015_data$Device.Location:wifi_2015_data$Campus)))
+plot(tci)
+boxcox(dur_lm, plotit=T, lambda=seq(-0.40,-0.37,by=0.001))
