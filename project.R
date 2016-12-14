@@ -277,6 +277,10 @@ for (j in 1:length(psig)){
        las=1,cex.axis=.8,col.axis=psig[length(psig)-j+1])
 }
 
+# Interaction plot
+interaction.plot(wifi_2015_data$Device.Location, wifi_2015_data$Campus, wifi_2015_data$Duration) 
+interaction.plot(wifi_2015_data$Campus, wifi_2015_data$Device.Location, wifi_2015_data$Duration) 
+
 # Multi-level Tukey
 # (tci <- TukeyHSD(aov(wifi_2015_data$Duration ~ wifi_2015_data$Device.Location:wifi_2015_data$Campus)))
 plot(tci)
@@ -292,4 +296,23 @@ for (j in 1:length(psig)){
   axis(2,at=j,labels=rownames(tci$`wifi_2015_data$Campus`)[length(psig)-j+1],
        las=1,cex.axis=.8,col.axis=psig[length(psig)-j+1])
 }
+
+# Regression diagnostics
+par(mfrow=c(1,2))
+qqnorm(residuals(dur_lm),main="")
+qqline(residuals(dur_lm))
+plot(fitted(dur_lm),residuals(dur_lm),xlab="Fitted",ylab="Residuals")
+abline(h=0)
+par(mfrow=c(1,1))
+
+par(mfrow=c(1,2))
+qqnorm(residuals(dur_trans_lm),main="")
+qqline(residuals(dur_trans_lm))
+plot(fitted(dur_trans_lm),residuals(dur_trans_lm),xlab="Fitted",ylab="Residuals")
+abline(h=0)
+par(mfrow=c(1,1))
+
+# Interaction model
+dur_inter_lm <- lm(wifi_2015_data$Duration ~ wifi_2015_data$Device.Location:wifi_2015_data$Campus)
+summary(dur_inter_lm)
 
