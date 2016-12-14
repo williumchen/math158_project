@@ -269,10 +269,27 @@ summary(dur_lm)
 # summary(dur_inter_lm)
 anova(dur_lm)
 (tci <- TukeyHSD(aov(wifi_2015_data$Duration ~ wifi_2015_data$Device.Location + wifi_2015_data$Campus)))
-par(las=1, mar=c(5,20,5,5))
-plot(tci)
+par(las=1, mar=c(5,5,5,5))
+psig=as.numeric(apply(tci$`wifi_2015_data$Campus`[,2:3],1,prod)>=0)+1
+plot(tci,col=psig,yaxt="n")
+for (j in 1:length(psig)){
+  axis(2,at=j,labels=rownames(tci$`wifi_2015_data$Campus`)[length(psig)-j+1],
+       las=1,cex.axis=.8,col.axis=psig[length(psig)-j+1])
+}
 
 # Multi-level Tukey
 # (tci <- TukeyHSD(aov(wifi_2015_data$Duration ~ wifi_2015_data$Device.Location:wifi_2015_data$Campus)))
 plot(tci)
 boxcox(dur_lm, plotit=T, lambda=seq(-0.40,-0.37,by=0.001))
+dur_trans_lm <- lm(1/sqrt(wifi_2015_data$Duration) ~ wifi_2015_data$Device.Location + wifi_2015_data$Campus)
+summary(dur_trans_lm)
+anova(dur_trans_lm)
+(tci <- TukeyHSD(aov(1/sqrt(wifi_2015_data$Duration) ~ wifi_2015_data$Device.Location + wifi_2015_data$Campus)))
+par(las=1, mar=c(5,5,5,5))
+psig=as.numeric(apply(tci$`wifi_2015_data$Campus`[,2:3],1,prod)>=0)+1
+plot(tci,col=psig,yaxt="n")
+for (j in 1:length(psig)){
+  axis(2,at=j,labels=rownames(tci$`wifi_2015_data$Campus`)[length(psig)-j+1],
+       las=1,cex.axis=.8,col.axis=psig[length(psig)-j+1])
+}
+
